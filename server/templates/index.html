@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<head>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
+   integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+   crossorigin=""/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" />
+  <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
+  integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
+  crossorigin=""></script>
+</head>
+<html>
+    <body bgcolor="white">
+        <h1>On s'amuse un peu en mongodb avec leaflet !</h1>
+        <div id="mapid" style="width: 600px; height: 400px;"></div>
+      <script>
+
+       var mymap = L.map('mapid').setView([43.3, -0.366667], 13);
+
+       L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+         maxZoom: 18,
+         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+           '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+           'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+         id: 'mapbox.streets'
+       }).addTo(mymap);
+
+      // var myLayer = L.geoJSON().addTo(mymap);
+      var poubelle_verres = JSON.parse({{ poubelle_verres|tojson|safe }});
+      var aire_de_jeux = JSON.parse({{aireDeJeux|tojson|safe }});
+      var bancs = JSON.parse({{bancs|tojson|safe }});
+      var bars = JSON.parse({{bars|tojson|safe }});
+      var bus = JSON.parse({{bus|tojson|safe }});
+      var canisettes = JSON.parse({{canisettes|tojson|safe }});
+      var corbeilles = JSON.parse({{corbeilles|tojson|safe }});
+      var fontaine = JSON.parse({{fontaine|tojson|safe }});
+      var horodateur = JSON.parse({{horodateur|tojson|safe }});
+      var idcycle = JSON.parse({{idcycle|tojson|safe }});
+      var parking = JSON.parse({{parking|tojson|safe }});
+      var parkingvelo = JSON.parse({{parkingvelo|tojson|safe }});
+      var pistecycle = JSON.parse({{pistecycle|tojson|safe }});
+      var stationnement = JSON.parse({{stationnement|tojson|safe }});
+      //L.geoJSON(poubelle_verres).addTo(mymap);
+
+      var overlayMaps = {
+        "Poubelles_Verres":   L.geoJSON(poubelle_verres),
+        "Aire_De_Jeux": L.geoJSON(aire_de_jeux),
+        "Bancs": L.geoJSON(bancs),
+        "Bars": L.geoJSON(bars),
+        "bus": L.geoJSON(bus),
+        "canisettes": L.geoJSON(canisettes),
+        "corbeilles": L.geoJSON(corbeilles),
+        "fontaine": L.geoJSON(fontaine),
+        "horodateur": L.geoJSON(horodateur),
+        "idcycle": L.geoJSON(idcycle),
+        "parking": L.geoJSON(parking),
+        "parkingvelo": L.geoJSON(parkingvelo),
+        "pistecycle": L.geoJSON(pistecycle),
+        "stationnement": L.geoJSON(stationnement),
+      }
+        L.control.layers(null,overlayMaps).addTo(mymap);
+      </script>
+    </body>
+</html>

@@ -1,0 +1,34 @@
+version: '3.5'
+services:
+ web_dev:
+  build: .
+  ports:
+   - "4000:4000"
+  volumes:
+   - .:/app
+  environment:
+   - ENV=development
+   - PORT=4000
+   - DB=mongodb://mongodb:27017/db
+  links:
+    - mongodb
+  depends_on:
+    - mongodb
+
+ mongodb:
+  image: mongo:latest
+  ports:
+    - 27017:27017
+  command:
+    mongod --smallfiles --quiet
+
+ mongo-seed:
+  image: mongo:latest
+  links:
+    - mongodb
+  depends_on:
+    - web_dev
+  volumes:
+  - ./data.pau/data:/pau
+  command:
+    ./pau/import.sh
